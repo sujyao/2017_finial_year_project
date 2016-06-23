@@ -10,6 +10,7 @@ Common symbol       size              file
 
 mcriosec            0x1               Comparator.o
 abc                 0x2               Comparator.o
+flag                0x1               Comparator.o
 second              0x1               Comparator.o
 count               0x1               Comparator.o
 a                   0x2               Comparator.o
@@ -170,7 +171,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x236
+.text           0x00000000      0x244
  *(.vectors)
  .vectors       0x00000000       0x7c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm64m1.o
                 0x00000000                __vector_default
@@ -258,19 +259,19 @@ END GROUP
  *(.text.*)
  .text.setup    0x000000a4       0x80 Comparator.o
                 0x000000a4                setup
- .text.main     0x00000124       0x98 Comparator.o
+ .text.main     0x00000124       0xc2 Comparator.o
                 0x00000124                main
  .text.__vector_2
-                0x000001bc       0x48 Comparator.o
-                0x000001bc                __vector_2
+                0x000001e6       0x2c Comparator.o
+                0x000001e6                __vector_2
  .text.__vector_12
-                0x00000204       0x2e Comparator.o
-                0x00000204                __vector_12
-                0x00000232                . = ALIGN (0x2)
+                0x00000212       0x2e Comparator.o
+                0x00000212                __vector_12
+                0x00000240                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000232        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
-                0x00000232                _exit
-                0x00000232                exit
+ .fini9         0x00000240        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+                0x00000240                _exit
+                0x00000240                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -289,11 +290,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000232        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000240        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000236                _etext = .
+                0x00000244                _etext = .
 
-.data           0x00800100        0x0 load address 0x00000236
+.data           0x00800100        0x0 load address 0x00000244
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -304,27 +305,28 @@ END GROUP
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0x7
+.bss            0x00800100        0x8
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800100        0x7 Comparator.o
+ COMMON         0x00800100        0x8 Comparator.o
                 0x00800100                mcriosec
                 0x00800101                abc
-                0x00800103                second
-                0x00800104                count
-                0x00800105                a
-                0x00800107                PROVIDE (__bss_end, .)
-                0x00000236                __data_load_start = LOADADDR (.data)
-                0x00000236                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800103                flag
+                0x00800104                second
+                0x00800105                count
+                0x00800106                a
+                0x00800108                PROVIDE (__bss_end, .)
+                0x00000244                __data_load_start = LOADADDR (.data)
+                0x00000244                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800107        0x0
-                0x00800107                PROVIDE (__noinit_start, .)
+.noinit         0x00800108        0x0
+                0x00800108                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800107                PROVIDE (__noinit_end, .)
-                0x00800107                _end = .
-                0x00800107                PROVIDE (__heap_start, .)
+                0x00800108                PROVIDE (__noinit_end, .)
+                0x00800108                _end = .
+                0x00800108                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -391,30 +393,30 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x2ef
+.debug_info     0x00000000      0x2fb
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x2ef Comparator.o
+ .debug_info    0x00000000      0x2fb Comparator.o
 
 .debug_abbrev   0x00000000      0x167
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x167 Comparator.o
 
-.debug_line     0x00000000      0x1be
+.debug_line     0x00000000      0x1c5
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x1be Comparator.o
+ .debug_line    0x00000000      0x1c5 Comparator.o
 
-.debug_frame    0x00000000       0x84
+.debug_frame    0x00000000       0x78
  *(.debug_frame)
- .debug_frame   0x00000000       0x84 Comparator.o
+ .debug_frame   0x00000000       0x78 Comparator.o
 
-.debug_str      0x00000000      0x1da
+.debug_str      0x00000000      0x1d5
  *(.debug_str)
- .debug_str     0x00000000      0x1da Comparator.o
-                                0x20e (size before relaxing)
+ .debug_str     0x00000000      0x1d5 Comparator.o
+                                0x209 (size before relaxing)
 
-.debug_loc      0x00000000       0xe4
+.debug_loc      0x00000000      0x1a2
  *(.debug_loc)
- .debug_loc     0x00000000       0xe4 Comparator.o
+ .debug_loc     0x00000000      0x1a2 Comparator.o
 
 .debug_macinfo
  *(.debug_macinfo)

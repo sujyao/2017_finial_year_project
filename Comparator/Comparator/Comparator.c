@@ -18,7 +18,7 @@
 
 
 //global variable
-volatile uint8_t count,mcriosec;
+volatile uint8_t count,mcriosec, flag;
 volatile uint8_t second;
 volatile int a;
 
@@ -42,33 +42,36 @@ int main(void)
 		//ledOn;
 
 		if (bit_is_set(PIND,PIND6)) // REACH 100v
-		{
-			a=0;	
-			//count = 0;
-			//abc = 0;
-			ledOn;
+		{	
+			flag = 0;
+			TCCR1A = 0x00;
+			TCCR1B = 0x00;
 			gateOff;
-			//TCCR1B = 0x00;
+			ledOn;
 			_delay_ms(50);
 			IRledon;   //Discharge SCR on.
 			_delay_ms(50);
 			IRledoff;	
 			//Turn the timer back on 
 			_delay_ms(1000);
-			TCCR1A |= (1<<COM1A1)|(1<<COM1A0); // Set OC1A/OC1B on compare match when upcounting.Clear OC1A/OC1B on compare match when down counting.
-			TCCR1B |= (1<<WGM13)|(1<<CS10);
+			a=0;
+			TCCR1A |= (1<<COM1A1)|(1<<WGM11); // Fast PWM clear on match set at top
+			TCCR1B |= (1<<WGM13)|(1<<CS10)|(1<<WGM12);  // Fast PWM 16MHz
 			TIMSK1 |= (1<<OCIE1A);
-			ICR1 = 160;
-			OCR1A = 144;
+			ICR1 = 319;
+			OCR1A = 31; // 2us on 18us off.
 		}
 		
-		  
+		else if (a >= 800 && bit_is_clear(PIND,PIND6))
+		{
+			TCCR1A = 0x00;
+			TCCR1B = 0x00;
+			flag = 1;
+		}  
     }
 }
 void setup(void)
 {
-	
-	
 	DDRD = 0b00010100;//PD2 PWM signal PD4 IR LED.
 	PORTD = 0x00;
 	DDRC = 0b10000000;
@@ -76,13 +79,16 @@ void setup(void)
 	
 	_delay_ms(1000);
 	////Timer 1
-	TCCR1A |= (1<<COM1A1)|(1<<COM1A0); // Set OC1A/OC1B on compare match when upcounting.Clear OC1A/OC1B on compare match when down counting.
-	TCCR1B |= (1<<WGM13)|(1<<CS10);  // PWM, phase and frequency correct. 8MHz.
+	TCCR1A |= (1<<COM1A1)|(1<<WGM11); // Fast PWM clear on match set at top
+	TCCR1B |= (1<<WGM13)|(1<<CS10)|(1<<WGM12);  // Fast PWM 16MHz
 	TIMSK1 |= (1<<OCIE1A);
 	
-	ICR1 = 160;
-	OCR1A = 144; // 2us on.48us off.
+	
+	
+	ICR1 = 319;
+	OCR1A = 31; // 2us on 18us off.
 	sei();
+ 
 
 	
 	//Comparator setup
@@ -98,22 +104,16 @@ void setup(void)
 }
 ISR(ANACOMP1_vect)
 {
-		//count++;
-		if (a >= 1000 && bit_is_clear(PIND,PIND6))
-		{
-			//count = 0;
-			TCCR1A = 0x00;
-			TCCR1B = 0x00;
-			gateOn;
-			_delay_us(4);
-			gateOff;
-			ledOn;
-		}
-		
+	
+	if (flag ==1)
+	{
+		gateOn;
+		_delay_us(2);
+		gateOff;
+	}
+
 	
 }
-
-
 
 ISR(TIMER1_COMPA_vect)
 {
