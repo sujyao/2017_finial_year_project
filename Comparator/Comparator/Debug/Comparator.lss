@@ -3,27 +3,27 @@ Comparator.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000244  00000000  00000000  00000074  2**1
+  0 .text         0000025a  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000008  00800100  00800100  000002b8  2**0
+  1 .bss          00000008  00800100  00800100  000002ce  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  000002b8  2**0
+  2 .comment      00000030  00000000  00000000  000002ce  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000038  00000000  00000000  000002e8  2**0
+  3 .debug_aranges 00000038  00000000  00000000  000002fe  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000002fb  00000000  00000000  00000320  2**0
+  4 .debug_info   000002fb  00000000  00000000  00000336  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000167  00000000  00000000  0000061b  2**0
+  5 .debug_abbrev 00000167  00000000  00000000  00000631  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000001c5  00000000  00000000  00000782  2**0
+  6 .debug_line   000001ce  00000000  00000000  00000798  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000078  00000000  00000000  00000948  2**2
+  7 .debug_frame  00000078  00000000  00000000  00000968  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000001d5  00000000  00000000  000009c0  2**0
+  8 .debug_str    000001d5  00000000  00000000  000009e0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    000001a2  00000000  00000000  00000b95  2**0
+  9 .debug_loc    000001a2  00000000  00000000  00000bb5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000028  00000000  00000000  00000d37  2**0
+ 10 .debug_ranges 00000028  00000000  00000000  00000d57  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -41,7 +41,7 @@ Disassembly of section .text:
   24:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   28:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   2c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
-  30:	0c 94 09 01 	jmp	0x212	; 0x212 <__vector_12>
+  30:	0c 94 14 01 	jmp	0x228	; 0x228 <__vector_12>
   34:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   38:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   3c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
@@ -83,7 +83,7 @@ Disassembly of section .text:
   94:	b2 07       	cpc	r27, r18
   96:	e1 f7       	brne	.-8      	; 0x90 <.do_clear_bss_loop>
   98:	0e 94 92 00 	call	0x124	; 0x124 <main>
-  9c:	0c 94 20 01 	jmp	0x240	; 0x240 <_exit>
+  9c:	0c 94 2b 01 	jmp	0x256	; 0x256 <_exit>
 
 000000a0 <__bad_interrupt>:
   a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -139,9 +139,6 @@ void setup(void)
   d8:	80 81       	ld	r24, Z
   da:	82 60       	ori	r24, 0x02	; 2
   dc:	80 83       	st	Z, r24
-	
-	
-	
 	
 	ICR1 = 319;
   de:	8f e3       	ldi	r24, 0x3F	; 63
@@ -200,7 +197,7 @@ int main(void)
 			OCR1A = 31; // 2us on 18us off.
 		}
 		
-		else if (a >= 800 && bit_is_clear(PIND,PIND6))
+		else if (a>=800 && bit_is_clear(PIND,PIND6))
 		{
 			TCCR1A = 0x00;
  128:	a0 e8       	ldi	r26, 0x80	; 128
@@ -316,7 +313,7 @@ int main(void)
  1c6:	c6 cf       	rjmp	.-116    	; 0x154 <main+0x30>
 		}
 		
-		else if (a >= 800 && bit_is_clear(PIND,PIND6))
+		else if (a>=800 && bit_is_clear(PIND,PIND6))
  1c8:	80 91 06 01 	lds	r24, 0x0106
  1cc:	90 91 07 01 	lds	r25, 0x0107
  1d0:	80 32       	cpi	r24, 0x20	; 32
@@ -348,64 +345,73 @@ ISR(ANACOMP1_vect)
  1ee:	11 24       	eor	r1, r1
  1f0:	8f 93       	push	r24
 	
-	if (flag ==1)
- 1f2:	80 91 03 01 	lds	r24, 0x0103
- 1f6:	81 30       	cpi	r24, 0x01	; 1
- 1f8:	31 f4       	brne	.+12     	; 0x206 <__vector_2+0x20>
+	++count;
+ 1f2:	80 91 05 01 	lds	r24, 0x0105
+ 1f6:	8f 5f       	subi	r24, 0xFF	; 255
+ 1f8:	80 93 05 01 	sts	0x0105, r24
+	if (count>0 && flag==1)
+ 1fc:	80 91 05 01 	lds	r24, 0x0105
+ 200:	88 23       	and	r24, r24
+ 202:	61 f0       	breq	.+24     	; 0x21c <__vector_2+0x36>
+ 204:	80 91 03 01 	lds	r24, 0x0103
+ 208:	81 30       	cpi	r24, 0x01	; 1
+ 20a:	41 f4       	brne	.+16     	; 0x21c <__vector_2+0x36>
 	{
+		count = 0;
+ 20c:	10 92 05 01 	sts	0x0105, r1
 		gateOn;
- 1fa:	5a 9a       	sbi	0x0b, 2	; 11
+ 210:	5a 9a       	sbi	0x0b, 2	; 11
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 1fc:	8a e0       	ldi	r24, 0x0A	; 10
- 1fe:	8a 95       	dec	r24
- 200:	f1 f7       	brne	.-4      	; 0x1fe <__vector_2+0x18>
- 202:	00 c0       	rjmp	.+0      	; 0x204 <__vector_2+0x1e>
+ 212:	8a e0       	ldi	r24, 0x0A	; 10
+ 214:	8a 95       	dec	r24
+ 216:	f1 f7       	brne	.-4      	; 0x214 <__vector_2+0x2e>
+ 218:	00 c0       	rjmp	.+0      	; 0x21a <__vector_2+0x34>
 		_delay_us(2);
 		gateOff;
- 204:	5a 98       	cbi	0x0b, 2	; 11
+ 21a:	5a 98       	cbi	0x0b, 2	; 11
 	}
-
+	
 	
 }
- 206:	8f 91       	pop	r24
- 208:	0f 90       	pop	r0
- 20a:	0f be       	out	0x3f, r0	; 63
- 20c:	0f 90       	pop	r0
- 20e:	1f 90       	pop	r1
- 210:	18 95       	reti
+ 21c:	8f 91       	pop	r24
+ 21e:	0f 90       	pop	r0
+ 220:	0f be       	out	0x3f, r0	; 63
+ 222:	0f 90       	pop	r0
+ 224:	1f 90       	pop	r1
+ 226:	18 95       	reti
 
-00000212 <__vector_12>:
+00000228 <__vector_12>:
 
 ISR(TIMER1_COMPA_vect)
 {
- 212:	1f 92       	push	r1
- 214:	0f 92       	push	r0
- 216:	0f b6       	in	r0, 0x3f	; 63
- 218:	0f 92       	push	r0
- 21a:	11 24       	eor	r1, r1
- 21c:	8f 93       	push	r24
- 21e:	9f 93       	push	r25
+ 228:	1f 92       	push	r1
+ 22a:	0f 92       	push	r0
+ 22c:	0f b6       	in	r0, 0x3f	; 63
+ 22e:	0f 92       	push	r0
+ 230:	11 24       	eor	r1, r1
+ 232:	8f 93       	push	r24
+ 234:	9f 93       	push	r25
 	a++;
- 220:	80 91 06 01 	lds	r24, 0x0106
- 224:	90 91 07 01 	lds	r25, 0x0107
- 228:	01 96       	adiw	r24, 0x01	; 1
- 22a:	90 93 07 01 	sts	0x0107, r25
- 22e:	80 93 06 01 	sts	0x0106, r24
- 232:	9f 91       	pop	r25
- 234:	8f 91       	pop	r24
- 236:	0f 90       	pop	r0
- 238:	0f be       	out	0x3f, r0	; 63
- 23a:	0f 90       	pop	r0
- 23c:	1f 90       	pop	r1
- 23e:	18 95       	reti
+ 236:	80 91 06 01 	lds	r24, 0x0106
+ 23a:	90 91 07 01 	lds	r25, 0x0107
+ 23e:	01 96       	adiw	r24, 0x01	; 1
+ 240:	90 93 07 01 	sts	0x0107, r25
+ 244:	80 93 06 01 	sts	0x0106, r24
+ 248:	9f 91       	pop	r25
+ 24a:	8f 91       	pop	r24
+ 24c:	0f 90       	pop	r0
+ 24e:	0f be       	out	0x3f, r0	; 63
+ 250:	0f 90       	pop	r0
+ 252:	1f 90       	pop	r1
+ 254:	18 95       	reti
 
-00000240 <_exit>:
- 240:	f8 94       	cli
+00000256 <_exit>:
+ 256:	f8 94       	cli
 
-00000242 <__stop_program>:
- 242:	ff cf       	rjmp	.-2      	; 0x242 <__stop_program>
+00000258 <__stop_program>:
+ 258:	ff cf       	rjmp	.-2      	; 0x258 <__stop_program>

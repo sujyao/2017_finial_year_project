@@ -62,7 +62,7 @@ int main(void)
 			OCR1A = 31; // 2us on 18us off.
 		}
 		
-		else if (a >= 800 && bit_is_clear(PIND,PIND6))
+		else if (a>=800 && bit_is_clear(PIND,PIND6))
 		{
 			TCCR1A = 0x00;
 			TCCR1B = 0x00;
@@ -82,8 +82,6 @@ void setup(void)
 	TCCR1A |= (1<<COM1A1)|(1<<WGM11); // Fast PWM clear on match set at top
 	TCCR1B |= (1<<WGM13)|(1<<CS10)|(1<<WGM12);  // Fast PWM 16MHz
 	TIMSK1 |= (1<<OCIE1A);
-	
-	
 	
 	ICR1 = 319;
 	OCR1A = 31; // 2us on 18us off.
@@ -105,13 +103,15 @@ void setup(void)
 ISR(ANACOMP1_vect)
 {
 	
-	if (flag ==1)
+	++count;
+	if (count>0 && flag==1)
 	{
+		count = 0;
 		gateOn;
 		_delay_us(2);
 		gateOff;
 	}
-
+	
 	
 }
 
