@@ -15,7 +15,7 @@
 #define IRledoff  (PORTD &= ~(1<<4)) 
 #define ledOn	(PORTC |= (1<<7))
 #define ledOff	(PORTC &= ~(1<<7))
-
+#define  PD6ON  (PORTD |= (1<<6))
 
 //global variable
 volatile uint8_t count,mcriosec, flag;
@@ -30,7 +30,7 @@ ISR(TIMER1_COMPA_vect);
 
 void setup(void);
 
-int abc;
+int abc;   
 
 int main(void)
 {
@@ -44,10 +44,10 @@ int main(void)
 		if (bit_is_set(PIND,PIND6)) // REACH 100v
 		{	
 			flag = 0;
-			TCCR1A = 0x00;
-			TCCR1B = 0x00;
+			//TCCR1A = 0x00;
+			//TCCR1B = 0x00;
 			gateOff;
-			ledOn;
+			//ledOn;
 			_delay_ms(50);
 			IRledon;   //Discharge SCR on.
 			_delay_ms(50);
@@ -62,7 +62,7 @@ int main(void)
 			OCR1A = 31; // 2us on 18us off.
 		}
 		
-		else if (a>=800 && bit_is_clear(PIND,PIND6))
+		else if (a>=400 && bit_is_clear(PIND,PIND6))
 		{
 			TCCR1A = 0x00;
 			TCCR1B = 0x00;
@@ -103,10 +103,8 @@ void setup(void)
 ISR(ANACOMP1_vect)
 {
 	
-	++count;
-	if (count>0 && flag==1)
+	if (flag==1)
 	{
-		count = 0;
 		gateOn;
 		_delay_us(2);
 		gateOff;
